@@ -13,6 +13,7 @@
 #include <ers/OutputStream.h>
 #include <nlohmann/json.hpp>
 #include <string>
+#include <vector>
 
 namespace erses
 {    
@@ -33,7 +34,7 @@ namespace erses
       private:	
         std::string uri_;
 	std::string partition_;
-	void ers_to_json(const ers::Issue & issue, nlohmann::json & message);
+	void ers_to_json(const ers::Issue & issue, size_t chain, std::vector<nlohmann::json> & j_objs);
     };
 } //namespace erses
 

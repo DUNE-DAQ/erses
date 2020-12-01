@@ -16,7 +16,7 @@
 #include <stdexcept>
 #include <thread>
 #include <boost/lexical_cast.hpp>
-#include <stirng>
+#include <string>
 #include <memory>
 
 struct Test {
