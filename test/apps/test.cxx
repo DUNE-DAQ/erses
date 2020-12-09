@@ -128,6 +128,7 @@ void Message( const int level, const std::string msg) {
 int main(int ac, char** av)
 {
     test_function( 0 );
+/*
     test_function( 0 );
 
     test_local_catcher();
@@ -194,6 +195,8 @@ int main(int ac, char** av)
             handler.reset();
 	}
     }
+*/
     return 0 ;
+
 }
 

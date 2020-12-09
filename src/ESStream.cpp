@@ -13,22 +13,24 @@
 #include <chrono>
 #include <boost/crc.hpp>
 
-ERS_REGISTER_OUTPUT_STREAM( erses::ESStream, "erses", uri )
+#include <pistache/client.h>
+#include <pistache/http.h>
+
+using namespace Pistache;
+
+ERS_REGISTER_OUTPUT_STREAM( erses::ESStream, "erses", url )
 
 
 /** Constructor that creates a new instance of the erses stream with the given configuration.
   * \param format elastic search connection string.
   */
-erses::ESStream::ESStream( const std::string & uri): uri_(uri), partition_("test")
+erses::ESStream::ESStream( const std::string & url): url_(url), partition_("test")
 {
-    std::cout << uri_ << std::endl;
-
   // keep URL for ES
 }
 
 void erses::ESStream::ers_to_json(const ers::Issue & issue, size_t chain, std::vector<nlohmann::json> & j_objs)
 {
-    ERS_DEBUG(3, "Building message: " << issue.get_class_name()) ;
     nlohmann::json message;            
     message["partition"] = partition_.c_str();
     message["issue_name"] = issue.get_class_name() ;
@@ -83,13 +85,13 @@ void erses::ESStream::write( const ers::Issue & issue )
     std::string tmp = tmpstream.str() ;
     boost::crc_32_type crc32 ;
     crc32.process_bytes(tmp.c_str(), tmp.length());
-    
+
     for (auto j : j_objs ) {
 	j["group_hash"]=crc32.checksum();
-        std::cout << j.dump(1) << std::endl;
-	std::cout << "===================" << std::endl;
+	auto response = cpr::Post(cpr::Url{url}, cpr::Authentication{"duneonl", "xxxx"}, 
+                                  cpr::Header{"Content-Type", "application/json" }, cpr::Body{j.dump()});
+        std::cout << "Post result " << response.status_code << "\t" << response.text);
     }
-    std::cout << "*+*+*+*+*+*+*+*+*+*+*+*" << std::endl;
 
     chained().write( issue ); 
 }

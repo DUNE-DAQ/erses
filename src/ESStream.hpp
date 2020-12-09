@@ -12,6 +12,7 @@
 
 #include <ers/OutputStream.h>
 #include <nlohmann/json.hpp>
+#include <pistache/client.h>
 #include <string>
 #include <vector>
 
@@ -27,13 +28,14 @@ namespace erses
     class ESStream : public ers::OutputStream
     {
       public:
-	explicit ESStream( const std::string & uri);
+	explicit ESStream( const std::string & url);
 	
         void write( const ers::Issue & issue ) override;
         
       private:	
-        std::string uri_;
+        std::string url_;
 	std::string partition_;
+	Pistache::Http::Client client_;
 	void ers_to_json(const ers::Issue & issue, size_t chain, std::vector<nlohmann::json> & j_objs);
     };
 } //namespace erses
