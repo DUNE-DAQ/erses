@@ -12,7 +12,6 @@
 
 #include <ers/OutputStream.h>
 #include <nlohmann/json.hpp>
-#include <pistache/client.h>
 #include <string>
 #include <vector>
 
@@ -35,7 +34,6 @@ namespace erses
       private:	
         std::string url_;
 	std::string partition_;
-	Pistache::Http::Client client_;
 	void ers_to_json(const ers::Issue & issue, size_t chain, std::vector<nlohmann::json> & j_objs);
     };
 } //namespace erses

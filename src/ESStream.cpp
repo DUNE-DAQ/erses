@@ -13,8 +13,7 @@
 #include <chrono>
 #include <boost/crc.hpp>
 
-#include <pistache/client.h>
-#include <pistache/http.h>
+#include <cpr/cpr.h>
 
 using namespace Pistache;
 
