@@ -7,7 +7,7 @@ daq_setup_environment()
 
 find_package(ers REQUIRED)     
 find_package(nlohmann_json REQUIRED)
-find_package(cpr REQUIRED)
+find_package(CPR REQUIRED)
 
 set(ERSES_DEPENDENCIES ers::ers nlohmann_json::nlohmann_json ${CPR_LIBRARIES})
 
@@ -17,7 +17,7 @@ set(ERSES_DEPENDENCIES ers::ers nlohmann_json::nlohmann_json ${CPR_LIBRARIES})
 # Note that when the ers library is linked in, it uses a "::" because
 # it's in an external package, not a local CMake target. The semantics
 # are <namespace>::<shared library / executable>
-daq_add_library(ESStream.cpp LINK_LIBRARIES ${ERSES_DEPENDENCIES})
+daq_add_library(ESStream.cpp LINK_LIBRARIES curl ${ERSES_DEPENDENCIES})
 target_include_directories(erses PUBLIC ${CPR_INCLUDE_DIRS})
 
 ##############################################################################

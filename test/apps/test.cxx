@@ -127,10 +127,12 @@ void Message( const int level, const std::string msg) {
 
 int main(int ac, char** av)
 {
-    test_function( 0 );
-/*
+
     test_function( 0 );
 
+    test_function( 0 );
+
+    /*
     test_local_catcher();
 
     IssueCatcher catcher;
@@ -147,12 +149,14 @@ int main(int ac, char** av)
     }
 
     test_local_catcher();
-
+    */
     ERS_DEBUG( 0, "Testing output produced by different threads ... " );
     std::thread thr1( std::bind(test_function,1) );
     std::thread thr2( std::bind(test_function,2) );
     std::thread thr3( std::bind(test_function,3) );
     std::thread thr4( std::bind(test_function,4) );
+
+    sleep(5);
     thr1.join();
     thr2.join();
     thr3.join();
@@ -161,8 +165,11 @@ int main(int ac, char** av)
     test_function( 0 );
     test_function( 0 );
 
-    int steps = ac > 1 ? boost::lexical_cast<int>(av[1]) : 9;
+    
+
     Test test;
+
+    int steps = ac > 1 ? boost::lexical_cast<int>(av[1]) : 9;
     for( int step = 1; step < steps; ++step )
     {
 	try
@@ -192,10 +199,10 @@ int main(int ac, char** av)
 	    ers::CantOpenFile issue( ERS_HERE, "unknown", ex );
 	    issue.add_qualifier( "q3" );
 	    ers::warning( issue );
-            handler.reset();
+            //handler.reset();
 	}
     }
-*/
+
     return 0 ;
 
 }

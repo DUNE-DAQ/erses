@@ -13,7 +13,7 @@
 #include <chrono>
 #include <boost/crc.hpp>
 
-#include "cpr/cpr.h"
+#include <cpr/cpr.h>
 
 ERS_REGISTER_OUTPUT_STREAM( erses::ESStream, "erses", url )
 
@@ -85,9 +85,9 @@ void erses::ESStream::write( const ers::Issue & issue )
 
     for (auto j : j_objs ) {
 	j["group_hash"]=crc32.checksum();
-	auto response = cpr::Post(cpr::Url{url}, cpr::Authentication{"duneonl", "xxxx"}, 
-                                  cpr::Header{"Content-Type", "application/json" }, cpr::Body{j.dump()});
-        std::cout << "Post result " << response.status_code << "\t" << response.text);
+	auto response = cpr::Post(cpr::Url{url_}, cpr::Authentication{"duneonl", "xxx"}, 
+                                  cpr::Header{{"Content-Type", "application/json"}}, cpr::Body{j.dump()});
+        std::cout << "Post result " << response.status_code << "\t" << response.text << std::endl;
     }
 
     chained().write( issue ); 
