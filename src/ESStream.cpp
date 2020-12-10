@@ -13,9 +13,7 @@
 #include <chrono>
 #include <boost/crc.hpp>
 
-#include <cpr/cpr.h>
-
-using namespace Pistache;
+#include "cpr/cpr.h"
 
 ERS_REGISTER_OUTPUT_STREAM( erses::ESStream, "erses", url )
 
