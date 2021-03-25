@@ -7,11 +7,11 @@
  *
  */
 
-#include <ers/SampleIssues.h>
-#include <ers/OutputStream.h>
-#include <ers/StreamManager.h>
+#include <ers/SampleIssues.hpp>
+#include <ers/OutputStream.hpp>
+#include <ers/StreamManager.hpp>
 
-#include <ers/ers.h>
+#include <ers/ers.hpp>
 #include <csignal>
 #include <stdexcept>
 #include <thread>
@@ -22,9 +22,6 @@
 struct Test {
     void pass( int step )
     {
-        ERS_RANGE_CHECK( 0, step, 8 );
-
-        ERS_DEBUG( 0, "performing step #" << step );
         switch ( step )
         {
             case 1:
@@ -46,7 +43,6 @@ struct Test {
             case 4:
                 {
                     for ( int level = 0; level < 4; level++ ) {
-                        ERS_DEBUG( level, "Debug message with level " << level );
                     }
                     throw ers::CantOpenFile( ERS_HERE, "foo3" );
                 }
@@ -66,7 +62,6 @@ struct Test {
                 break;
             default:
                 {
-                    ERS_INFO( "Unhandled exception will be intentionally thrown. Program will be aborted." );
                     struct UnhandledException {};
                     throw UnhandledException();
                 }
@@ -76,14 +71,12 @@ struct Test {
 
 void test_function( int index )
 {
-    ERS_LOG( "starting thread #" << index );
     usleep(10000);
     ers::error( ers::FileDoesNotExist( ERS_HERE, "error file" ) );
     usleep(10000);
     ers::fatal( ers::FileDoesNotExist( ERS_HERE, "fatal file" ) );
     usleep(10000);
     ers::warning( ers::FileDoesNotExist( ERS_HERE, "warning file" ) );
-    ERS_LOG( "finishing thread #" << index );
 }
 
 struct IssueCatcher
@@ -116,15 +109,6 @@ void test_local_catcher()
     ers::fatal( issue );
 }
 
-void Message( const int level, const std::string msg) {
-    //Deliver message to the proper stream
-    if (level <= 0) ERS_REPORT_IMPL( ers::debug, ers::Message, msg, level);
-    if (level == 1) ERS_REPORT_IMPL( ers::info, ers::Message, msg, );
-    if (level == 2) ERS_REPORT_IMPL( ers::warning, ers::Message, msg, );
-    if (level == 3) ERS_REPORT_IMPL( ers::error, ers::Message, msg, );
-    if (level >= 4) ERS_REPORT_IMPL( ers::fatal, ers::Message, msg, );
-}
-
 int main(int ac, char** av)
 {
 
@@ -132,25 +116,6 @@ int main(int ac, char** av)
 
     test_function( 0 );
 
-    /*
-    test_local_catcher();
-
-    IssueCatcher catcher;
-    std::unique_ptr<ers::IssueCatcherHandler> handler;
-    try
-    {
-    	handler.reset( ers::set_issue_catcher(
-    	        std::bind( &IssueCatcher::handler, &catcher, std::placeholders::_1 ) ) );
-    }
-    catch( ers::IssueCatcherAlreadySet & ex )
-    {
-    	ers::fatal( ex );
-        return 1;
-    }
-
-    test_local_catcher();
-    */
-    ERS_DEBUG( 0, "Testing output produced by different threads ... " );
     std::thread thr1( std::bind(test_function,1) );
     std::thread thr2( std::bind(test_function,2) );
     std::thread thr3( std::bind(test_function,3) );
@@ -164,8 +129,6 @@ int main(int ac, char** av)
 
     test_function( 0 );
     test_function( 0 );
-
-    
 
     Test test;
 
@@ -191,7 +154,6 @@ int main(int ac, char** av)
 	}
 	catch ( ers::Issue & ex )
 	{
-	    ERS_DEBUG( 0, "Unknown issue caught: " << ex );
             ers::error( ex );
 	}
 	catch ( std::exception & ex )
@@ -199,7 +161,6 @@ int main(int ac, char** av)
 	    ers::CantOpenFile issue( ERS_HERE, "unknown", ex );
 	    issue.add_qualifier( "q3" );
 	    ers::warning( issue );
-            //handler.reset();
 	}
     }
 

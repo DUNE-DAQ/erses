@@ -10,7 +10,7 @@
 #ifndef ERSES_ESSTREAM_HPP 
 #define ERSES_ESSTREAM_HPP
 
-#include <ers/OutputStream.h>
+#include <ers/OutputStream.hpp>
 #include <nlohmann/json.hpp>
 #include <string>
 #include <vector>
@@ -27,13 +27,14 @@ namespace erses
     class ESStream : public ers::OutputStream
     {
       public:
-	explicit ESStream( const std::string & url);
+	explicit ESStream( const std::string & param);
 	
         void write( const ers::Issue & issue ) override;
         
       private:	
-        std::string url_;
-	std::string partition_;
+        std::string m_url;
+        std::string m_cred;
+	std::string m_partition;
 	void ers_to_json(const ers::Issue & issue, size_t chain, std::vector<nlohmann::json> & j_objs);
     };
 } //namespace erses

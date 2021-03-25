@@ -7,7 +7,7 @@
 */
 
 #include "ESStream.hpp"
-#include <ers/StreamFactory.h>
+#include <ers/StreamFactory.hpp>
 #include <string>
 #include <iostream>
 #include <chrono>
@@ -15,21 +15,42 @@
 
 #include <cpr/cpr.h>
 
-ERS_REGISTER_OUTPUT_STREAM( erses::ESStream, "erses", url )
+ERS_REGISTER_OUTPUT_STREAM( erses::ESStream, "erses", param )
 
 
 /** Constructor that creates a new instance of the erses stream with the given configuration.
   * \param format elastic search connection string.
   */
-erses::ESStream::ESStream( const std::string & url): url_(url), partition_("test")
+erses::ESStream::ESStream( const std::string & param)
 {
-  // keep URL for ES
+    std::vector<std::string> params;
+    std::stringstream ss(param);
+    while (ss.good()) {
+        std::string substr;
+        getline(ss, substr, ',');
+        params.push_back(substr);
+    }
+    
+    if ( params.size() > 0 )
+    {
+        m_url = params[0];
+    }
+    
+    if ( params.size() > 1 )
+    {
+       m_partition = params[1];
+    } 
+    if ( params.size() > 2) {
+       m_cred = params[2];
+    } 
+
+ // keep URL for ES
 }
 
 void erses::ESStream::ers_to_json(const ers::Issue & issue, size_t chain, std::vector<nlohmann::json> & j_objs)
 {
     nlohmann::json message;            
-    message["partition"] = partition_.c_str();
+    message["partition"] = m_partition.c_str();
     message["issue_name"] = issue.get_class_name() ;
     message["message"] = issue.message().c_str() ;
     message["severity"] = ers::to_string(issue.severity()) ;
@@ -85,7 +106,7 @@ void erses::ESStream::write( const ers::Issue & issue )
 
     for (auto j : j_objs ) {
 	j["group_hash"]=crc32.checksum();
-	auto response = cpr::Post(cpr::Url{url_}, cpr::Authentication{"duneonl", "xxx"}, 
+	auto response = cpr::Post(cpr::Url{m_url}, cpr::Authentication{"duneonl", m_cred.c_str()}, 
                                   cpr::Header{{"Content-Type", "application/json"}}, cpr::Body{j.dump()});
         std::cout << "Post result " << response.status_code << "\t" << response.text << std::endl;
     }
