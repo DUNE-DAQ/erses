@@ -69,7 +69,7 @@ struct Test {
     }
 };
 
-void test_function( int index )
+void test_function( )
 {
     usleep(10000);
     ers::error( ers::FileDoesNotExist( ERS_HERE, "error file" ) );
@@ -112,14 +112,14 @@ void test_local_catcher()
 int main(int ac, char** av)
 {
 
-    test_function( 0 );
+    test_function(  );
 
-    test_function( 0 );
+    test_function(  );
 
-    std::thread thr1( std::bind(test_function,1) );
-    std::thread thr2( std::bind(test_function,2) );
-    std::thread thr3( std::bind(test_function,3) );
-    std::thread thr4( std::bind(test_function,4) );
+    std::thread thr1( std::bind(test_function) );
+    std::thread thr2( std::bind(test_function) );
+    std::thread thr3( std::bind(test_function) );
+    std::thread thr4( std::bind(test_function) );
 
     sleep(5);
     thr1.join();
@@ -127,8 +127,8 @@ int main(int ac, char** av)
     thr3.join();
     thr4.join();
 
-    test_function( 0 );
-    test_function( 0 );
+    test_function(  );
+    test_function(  );
 
     Test test;
 

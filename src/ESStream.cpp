@@ -108,7 +108,9 @@ void erses::ESStream::write( const ers::Issue & issue )
 	j["group_hash"]=crc32.checksum();
 	auto response = cpr::Post(cpr::Url{m_url}, cpr::Authentication{"duneonl", m_cred.c_str()}, 
                                   cpr::Header{{"Content-Type", "application/json"}}, cpr::Body{j.dump()});
-        std::cout << "Post result " << response.status_code << "\t" << response.text << std::endl;
+        if(response.status_code != 201) {
+          std::cout << "Post failed: result " << response.status_code << "\t" << response.text << std::endl;
+        }
     }
 
     chained().write( issue ); 

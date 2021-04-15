@@ -7,7 +7,7 @@ daq_setup_environment()
 
 find_package(ers REQUIRED)     
 find_package(nlohmann_json REQUIRED)
-find_package(CPR REQUIRED)
+find_package(cpr REQUIRED)
 
 set(ERSES_DEPENDENCIES ers::ers nlohmann_json::nlohmann_json ${CPR_LIBRARIES})
 
