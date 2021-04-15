@@ -4,4 +4,4 @@ In order to use it the ERS output streams can be configured through the environm
 export TDAQ_ERS_ERROR="lstderr, erses(uri)"
 
 ### Dependencies
-this package depends on nlohmann_json and Pistache. 
+this package depends on nlohmann_json and cpr. 
