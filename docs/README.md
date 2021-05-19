@@ -1,12 +1,25 @@
 ## erses - ERS output stream inserting ERS issues directly into elastic search
-This ERS output stream implementation takes issues, transforms them into nlohmann::json objects and injects them directly into an elastic search instance. The instance used is specified as a parameter to the erses stream.
-In order to use it the ERS output streams can be configured through the environment:
+This ERS output stream implementation takes ERS issues, transforms them into nlohmann::json objects and injects them directly into an elastic search database instance. The database connection string is specified as a parameter to the erses stream.
 
-export  DUNEDAQ_ERS_STREAM_LIBS=erses
+### Configuration
+The erses plugin is configured through the ERS settings. Users that want make use of it need to define/extend the following ERS environment variables:
+1. Tell ERS to load the erses plugin. The liberses.so shared library shall be in the LD_LIBRARY_PATH:
 
-export DUNEDAQ_PARTITION=ChooseYourPartitionName
+_export  DUNEDAQ_ERS_STREAM_LIBS=erses_
 
-and then extending the DUNEDAQ_ERS_<STREAM> variables with *erses(dunedaqutilities/erses)*.
+2. Se the partition name. The partition name allows to clearly distinguish the origin of the ERS messages, thus avoiding mixing information from different DAQ instances:
+
+_export DUNEDAQ_PARTITION=ChooseYourPartitionName_
+
+3. Extend the ERS variables which define the output streams to be used for Issues of different severities:
+  
+_export DUNEDAQ_ERS_INFO"erstrace,throttle(30,100),lstdout,erses(dunedaqutilities/erses)"_
+
+_export DUNEDAQ_ERS_WARNING="erstrace,throttle(30,100),lstderr,erses(dunedaqutilities/erses)"_
+
+_export DUNEDAQ_ERS_ERROR="erstrace,throttle(30,100),lstderr,erses(dunedaqutilities/erses)"_
+
+_export DUNEDAQ_ERS_FATAL="erstrace,lstderr,erses(dunedaqutilities/erses)"_
 
 ### Dependencies
-this package depends on nlohmann_json and cpr. 
+This package depends on nlohmann_json and cpr. 
