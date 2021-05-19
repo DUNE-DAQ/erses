@@ -1,5 +1,5 @@
 ## erses - ERS output stream inserting ERS issues directly into elastic search
-This ERS output stream implementation takes ERS issues, transforms them into nlohmann::json objects and injects them directly into an elastic search database instance. The database connection string is specified as a parameter to the erses stream.
+This ERS output stream implementation takes ERS issues, transforms them into nlohmann::json objects and injects them directly into an elastic search database instance. The database connection string is specified as a parameter to the erses stream. At CERN the connection string is _dunedaqutilities/erses_.
 
 ### Configuration
 The erses plugin is configured through the ERS settings. Users that want make use of it need to define/extend the following ERS environment variables:
